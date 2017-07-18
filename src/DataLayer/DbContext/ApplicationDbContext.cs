@@ -6,6 +6,14 @@ namespace VehicleShop.DataLayer.DbContext
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<Distributor> Distributors { get; set; }
+
+        public DbSet<Vehicle> Vehicles { get; set; }
+
+        public DbSet<Transaction> Transactions { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -14,9 +22,16 @@ namespace VehicleShop.DataLayer.DbContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<Customer>()
+                .HasOne<ApplicationUser>(x => x.User)
+                .WithOne()
+                .IsRequired();
+
+            builder.Entity<Distributor>()
+                .HasOne<ApplicationUser>(x => x.User)
+                .WithOne()
+                .IsRequired();
         }
     }
 }
