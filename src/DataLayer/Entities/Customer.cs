@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VehicleShop.DataLayer.Entities
 {
@@ -15,8 +17,8 @@ namespace VehicleShop.DataLayer.Entities
         public string Street { get; set; }
         public string ZipCode { get; set; }
 
-
-        public decimal Balance { get; set; }
+        [Range(0D, Double.MaxValue)]
+        public double Balance { get; set; }
 
 
         public string UserId { get; set; }

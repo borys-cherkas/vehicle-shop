@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace VehicleShop.DataLayer.Entities
 
         public string Description { get; set; }
 
+        [Range(0D, Double.MaxValue)]
         public double Cost { get; set; }
 
         public int? DistributorId { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using VehicleShop.BusinessLayer.Services.Interfaces;
 using VehicleShop.DataLayer.Entities;
 using VehicleShop.Models;
 using VehicleShop.Models.AccountViewModels;
@@ -12,15 +13,18 @@ namespace VehicleShop.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly ICustomersService _customersService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
 
         public AccountController(
+            ICustomersService customersService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILoggerFactory loggerFactory)
         {
+            _customersService = customersService;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
@@ -46,8 +50,9 @@ namespace VehicleShop.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (!result.Succeeded)
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
+                    lockoutOnFailure: false);
+                if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
@@ -79,18 +84,21 @@ namespace VehicleShop.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _customersService.RegisterCustomerAsync(model.Email, model.Password);
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation(3, "User created a new account with password.");
+                    var user = await _userManager.FindByNameAsync(model.Email);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
+
                     return RedirectToLocal(returnUrl);
                 }
+
                 AddErrors(result);
             }
 
@@ -106,7 +114,7 @@ namespace VehicleShop.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(VehiclesController.Index), "Vehicles");
         }
 
         // GET: /Account/ConfirmEmail
@@ -241,7 +249,7 @@ namespace VehicleShop.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(VehiclesController.Index), "Vehicles");
             }
         }
 

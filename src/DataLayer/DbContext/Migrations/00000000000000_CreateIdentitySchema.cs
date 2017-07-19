@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace VehicleShop.Data.Migrations
+namespace VehicleShop.DataLayer.DbContext.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

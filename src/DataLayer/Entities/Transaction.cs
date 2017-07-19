@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace VehicleShop.DataLayer.Entities
 {
@@ -11,7 +8,7 @@ namespace VehicleShop.DataLayer.Entities
 
         public DateTime TransactionTime { get; set; }
 
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
 
         public int DistributorId { get; set; }
         public Distributor Distributor { get; set; }

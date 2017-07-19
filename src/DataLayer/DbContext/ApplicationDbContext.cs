@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using VehicleShop.DataLayer.Entities;
 
 namespace VehicleShop.DataLayer.DbContext
@@ -24,14 +25,33 @@ namespace VehicleShop.DataLayer.DbContext
             base.OnModelCreating(builder);
 
             builder.Entity<Customer>()
-                .HasOne<ApplicationUser>(x => x.User)
+                .HasOne(x => x.User)
                 .WithOne()
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Distributor>()
-                .HasOne<ApplicationUser>(x => x.User)
+                .HasOne(x => x.User)
                 .WithOne()
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Transaction>()
+                .HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Transaction>()
+                .HasOne(x => x.Distributor)
+                .WithMany()
+                .HasForeignKey(x => x.DistributorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Transaction>()
+                .HasOne(x => x.Vehicle)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

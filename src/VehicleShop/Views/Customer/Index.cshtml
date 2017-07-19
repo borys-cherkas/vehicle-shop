@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Vehicle>
+
+@{
+    ViewBag.Title = "Vehicles";
+    Layout = "_Layout";
+}
+
+<h2>Your Own Vehicles</h2>
+
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td>Name</td>
+        <td>Current Price</td>
+        <td>Description</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var vehicle in Model)
+    {
+        <tr>
+            <td>@vehicle.Name</td>
+            <td>@vehicle.Cost</td>
+            <td>@vehicle.Description</td>
+            <td>
+                <a class="btn btn-success">Sell Out (not implemented)</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

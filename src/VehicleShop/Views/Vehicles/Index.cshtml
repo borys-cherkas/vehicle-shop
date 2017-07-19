@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Vehicle>
+
+@{
+    ViewBag.Title = "Vehicles";
+    Layout = "_Layout";
+}
+
+<h2>Vehicles For Sale</h2>
+
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Description</td>
+        <td>Phone</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var vehicle in Model)
+    {
+        <tr>
+            <td>@vehicle.Name</td>
+            <td>@vehicle.Cost</td>
+            <td>@vehicle.Description</td>
+            <td>@vehicle.Distributor.ContactPhone</td>
+            <td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(RolesConstants.Customer))
+                {
+                    @Html.ActionLink("Buy", "BuyVehicle", "Vehicles", new { vehicleId = vehicle.Id })
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using VehicleShop.Data;
 using VehicleShop.DataLayer.DbContext;
 using VehicleShop.DataLayer.Entities;
 using VehicleShop.Infrastructure;
-using VehicleShop.Models;
 
 namespace VehicleShop
 {
@@ -77,7 +71,11 @@ namespace VehicleShop
 
             app.UseIdentity();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default",
+                    "{controller=Vehicles}/{action=Index}/{id?}");
+            });
 
             DatabaseInitializer.Seed(app.ApplicationServices);
         }

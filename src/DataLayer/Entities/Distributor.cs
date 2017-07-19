@@ -1,4 +1,8 @@
-﻿namespace VehicleShop.DataLayer.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace VehicleShop.DataLayer.Entities
 {
     public class Distributor
     {
@@ -10,9 +14,12 @@
 
         public string ContactPhone { get; set; }
 
-        public decimal Balance { get; set; }
+        [Range(0D, Double.MaxValue)]
+        public double Balance { get; set; }
 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
+
+        public ICollection<Vehicle> Vehicles { get; set; }
     }
 }
