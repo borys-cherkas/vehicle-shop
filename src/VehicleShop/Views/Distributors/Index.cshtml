@@ -1,0 +1,86 @@
+﻿@model VehicleShop.Models.Distributor.IndexViewModel
+@{
+    ViewBag.Title = "Distributor Management Page";
+    Layout = "_Layout";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+
+<div>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>Balance:</dt>
+        <dd>
+            @Model.Distributor.Balance
+        </dd>
+    </dl>
+
+    <br/>
+
+    <h2>Your Vehicles</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td>Current Price</td>
+            <td>Description</td>
+            <td>Is Selling</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var vehicle in Model.Vehicles)
+        {
+            <tr>
+                <td>@vehicle.Name</td>
+                <td>@vehicle.Cost</td>
+                <td>@vehicle.Description</td>
+                <td>@vehicle.IsSelling</td>
+                <td>
+                    @if (vehicle.IsSelling)
+                    {
+                        @Html.ActionLink("Stop Selling Vehicle", "ChangeVehicleSalesState",
+                            new {vehicleId = vehicle.Id, newState = false}, new {@class = "btn btn-warning"})
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Start Selling Vehicle", "ChangeVehicleSalesState",
+                            new {vehicleId = vehicle.Id, newState = true}, new {@class = "btn btn-success"})
+                    }
+                    |
+                    @Html.ActionLink("Edit", "EditVehicle", new {vehicleId = vehicle.Id}, new {@class = "btn btn-default"})
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <br/>
+    
+    <h2>Your Transactions</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>Amount</td>
+                <td>Customer</td>
+                <td>Vehicle</td>
+                <td>When</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vehicle in Model.Transactions)
+            {
+                <tr>
+                    <td>@vehicle.Amount</td>
+                    <td>@vehicle.CustomerId</td>
+                    <td>@vehicle.Vehicle.Name</td>
+                    <td>@vehicle.TransactionTime.ToLocalTime()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

@@ -30,6 +30,14 @@ namespace VehicleShop.DataLayer.Repositories.Implementations
             return await query.ToListAsync();
         }
 
+        public Task<Distributor> GetDistributorByAppUserNameAsync(string username, Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null)
+        {
+            var query = _distributors
+                .ProcessQuery(queryFunc);
+
+            return query.SingleOrDefaultAsync(x => x.User.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
         public Task<Distributor> GetDistributorByIdAsync(int id, Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null)
         {
             var query = _distributors

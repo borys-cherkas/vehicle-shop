@@ -14,6 +14,7 @@ namespace VehicleShop.BusinessLayer.Infrastructure
             services.AddTransient<IVehiclesService, VehiclesService>();
             services.AddTransient<ICustomersService, CustomersService>();
             services.AddTransient<IDistributorsService, DistributorsService>();
+            services.AddTransient<ITransactionsService, TransactionsService>();
         }
     }
 }

@@ -30,6 +30,11 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             return _distributorsRepository.GetDistributorByIdAsync(id);
         }
 
+        public Task<Distributor> GetDistributorByUserNameAsync(string username)
+        {
+            return _distributorsRepository.GetDistributorByAppUserNameAsync(username);
+        }
+
         public Task UpdateDistributorAsync(Distributor distributor)
         {
             return _distributorsRepository.UpdateAsync(distributor);

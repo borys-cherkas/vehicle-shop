@@ -22,8 +22,14 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
         public Task<IList<Vehicle>> GetVehiclesForSaleAsync()
         {
             return _vehiclesRepository.GetVehiclesAsync(query => query
-                .Where(v => v.DistributorId.HasValue)
+                .Where(v => v.DistributorId.HasValue && v.IsSelling)
                 .Include(x => x.Distributor));
+        }
+
+        public Task<IList<Vehicle>> GetDistributorVehiclesAsync(int distributorId)
+        {
+            return _vehiclesRepository.GetVehiclesAsync(query => query
+                .Where(v => v.DistributorId == distributorId));
         }
 
         public Task<Vehicle> GetVehicleByIdAsync(int vehicleId)
@@ -35,6 +41,18 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
         {
             return _vehiclesRepository.GetVehiclesAsync(q => q
                 .Where(v => v.CustomerId == customerId));
+        }
+
+        public async Task ChangeSalesStateAsync(int vehicleId, bool newSalesState)
+        {
+            var vehicle = await GetVehicleByIdAsync(vehicleId);
+            vehicle.IsSelling = newSalesState;
+            await _vehiclesRepository.UpdateVehicleAsync(vehicle);
+        }
+
+        public Task UpdateAsync(Vehicle vehicle)
+        {
+            return _vehiclesRepository.UpdateVehicleAsync(vehicle);
         }
     }
 }

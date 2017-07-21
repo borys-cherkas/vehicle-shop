@@ -48,6 +48,13 @@
                         <a asp-controller="Customer" asp-action="Index">Customer Page</a>
                     </li>
                 }
+
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole(RolesConstants.Distributor))
+                {
+                    <li>
+                        <a asp-controller="Distributors" asp-action="Index">Distributor Management Page</a>
+                    </li>
+                }
             </ul>
             @await Html.PartialAsync("_LoginPartial")
         </div>

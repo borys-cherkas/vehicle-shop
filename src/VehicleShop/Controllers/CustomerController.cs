@@ -33,11 +33,11 @@ namespace VehicleShop.Controllers
         /// Returns Index page with vehicles.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(ManageMessageId? message = null)
+        public async Task<IActionResult> Index(CustomerMessageId? message = null)
         {
             ViewData["StatusMessage"] = 
-                message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.ReplenishBalanceSuccess ? "Balance has been replenished successfully"
+                message == CustomerMessageId.Error ? "An error has occurred."
+                : message == CustomerMessageId.ReplenishBalanceSuccess ? "Balance has been replenished successfully"
                 : "";
 
             string userName = User.Identity.Name;
@@ -74,12 +74,12 @@ namespace VehicleShop.Controllers
             var customer = await _customersService.GetByAppUserNameAsync(User.Identity.Name);
             await _customersService.ReplenishBalanceAsync(customer.Id, model.Amount);
 
-            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ReplenishBalanceSuccess });
+            return RedirectToAction(nameof(Index), new { Message = CustomerMessageId.ReplenishBalanceSuccess });
         }
 
 
 
-        public enum ManageMessageId
+        public enum CustomerMessageId
         {
             ReplenishBalanceSuccess,
             Error

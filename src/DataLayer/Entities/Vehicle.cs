@@ -14,6 +14,9 @@ namespace VehicleShop.DataLayer.Entities
 
         public string Description { get; set; }
 
+        public bool IsSelling { get; set; }
+
+
         [Range(0D, Double.MaxValue)]
         public double Cost { get; set; }
 

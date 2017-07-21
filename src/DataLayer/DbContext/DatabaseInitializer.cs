@@ -89,21 +89,24 @@ namespace VehicleShop.DataLayer.DbContext
                         DistributorId =  distributor.Id,
                         Name = "Car 1",
                         Description = "The Fastest car",
-                        Cost = 5000
+                        Cost = 5000,
+                        IsSelling = true
                     },
                     new Vehicle()
                     {
                         DistributorId =  distributor.Id,
                         Name = "Car 2",
                         Description = "Default car",
-                        Cost = 2500
+                        Cost = 2500,
+                        IsSelling = true
                     },
                     new Vehicle()
                     {
                         DistributorId =  distributor.Id,
                         Name = "Car 3",
                         Description = "Beautiful car",
-                        Cost = 7500
+                        Cost = 7500,
+                        IsSelling = true
                     }
                 };
 
