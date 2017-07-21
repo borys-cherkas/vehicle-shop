@@ -9,6 +9,6 @@ namespace VehicleShop.BusinessLayer.Services.Interfaces
     {
         Task<bool> CanUserBuyVehicleAsync(string userName, int vehicleId);
 
-        Task BuyVehicleAsync(int vehicleId, string userName);
+        Task<bool> BuyVehicleAsync(int vehicleId, string userName);
     }
 }

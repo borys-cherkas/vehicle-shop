@@ -48,7 +48,7 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             return true;
         }
 
-        public async Task BuyVehicleAsync(int vehicleId, string userName)
+        public async Task<bool> BuyVehicleAsync(int vehicleId, string userName)
         {
             if (!await CanUserBuyVehicleAsync(userName, vehicleId))
             {
@@ -58,6 +58,11 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             ApplicationUser user = await _userManager.FindByNameAsync(userName);
             Customer customer = await _customersService.GetByAppUserIdAsync(user.Id);
             Vehicle vehicle = await _vehiclesService.GetVehicleByIdAsync(vehicleId);
+
+            if (vehicle.Cost > customer.Balance)
+            {
+                return false;
+            }
 
             var transaction = new Transaction()
             {
@@ -73,10 +78,12 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             await _customersService.UpdateCustomerAsync(customer);
 
             transaction = await _transactionsRepository.AddTransactionAsync(transaction);
-            if (transaction != null)
+            if (transaction == null)
             {
-                await _vehiclesService.UpdateVehicleWithCustomerAsync(vehicleId, customer.Id);
+                return false;
             }
+            await _vehiclesService.UpdateVehicleWithCustomerAsync(vehicleId, customer.Id);
+            return true;
         }
     }
 }

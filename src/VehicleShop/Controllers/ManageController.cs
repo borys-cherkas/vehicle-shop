@@ -9,6 +9,9 @@ using VehicleShop.Models.ManageViewModels;
 
 namespace VehicleShop.Controllers
 {
+    /// <summary>
+    /// Provides the abilities to manage the user's account info.
+    /// </summary>
     [Authorize]
     public class ManageController : Controller
     {
@@ -16,6 +19,13 @@ namespace VehicleShop.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Creates a new instance of VehicleShop.Controllers.ManageController.
+        /// </summary>
+        /// <param name="userManager">Provides the APIs for managing user.</param>
+        /// <param name="signInManager">Represents service for user sign in functionality.</param>
+        /// <param name="loggerFactory">Represents a type used to configure the logging system 
+        /// and create instances of Microsoft.Extensions.Logging.ILogger.</param>
         public ManageController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -26,6 +36,10 @@ namespace VehicleShop.Controllers
             _logger = loggerFactory.CreateLogger<ManageController>();
         }
 
+        /// <summary>
+        /// Returns Index page.
+        /// </summary>
+        /// <param name="message">Status message</param>
         //
         // GET: /Manage/Index
         [HttpGet]
@@ -46,6 +60,9 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Returns Change Password page.
+        /// </summary>
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
@@ -54,6 +71,11 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Changes a user's password, sings user in and redirects to Manage/Index page.
+        /// </summary>
+        /// <param name="model">Change Password data. Contains old and new passwords.</param>
+        /// <returns>Index page with status message.</returns>
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
