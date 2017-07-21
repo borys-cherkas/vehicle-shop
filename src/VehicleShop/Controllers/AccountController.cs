@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using VehicleShop.BusinessLayer.Services.Interfaces;
 using VehicleShop.DataLayer.Entities;
-using VehicleShop.Models;
 using VehicleShop.Models.AccountViewModels;
 
 namespace VehicleShop.Controllers
 {
+    /// <summary>
+    /// Provides the APIs for user sign in.
+    /// </summary>
     [Authorize]
     public class AccountController : Controller
     {
@@ -18,6 +20,13 @@ namespace VehicleShop.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Creates a new instance of VehicleShop.Controllers.AccountController.
+        /// </summary>
+        /// <param name="customersService">The service to use to manage customers.</param>
+        /// <param name="userManager">The manager used to manage user accounts e.g. find/create actions.</param>
+        /// <param name="signInManager">The manager used to sign in users.</param>
+        /// <param name="loggerFactory">The logger used to log messages, warnings and errors.</param>
         public AccountController(
             ICustomersService customersService,
             UserManager<ApplicationUser> userManager,
@@ -30,6 +39,11 @@ namespace VehicleShop.Controllers
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
+        /// <summary>
+        /// Returns Login page.
+        /// </summary>
+        /// <param name="returnUrl">Represents URL to redirect after logging in.</param>
+        /// <returns>Login page</returns>
         //
         // GET: /Account/Login
         [HttpGet]
@@ -40,6 +54,11 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Logs in users and redirects to default page or returnUrl.
+        /// </summary>
+        /// <param name="model">Login data. Includes Email, Password and RememberMe flag.</param>
+        /// <param name="returnUrl">Represents URL to redirect after logging in.</param>
         //
         // POST: /Account/Login
         [HttpPost]
@@ -64,6 +83,11 @@ namespace VehicleShop.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Returns Register page.
+        /// </summary>
+        /// <param name="returnUrl">Represents URL to redirect after logging in.</param>
+        /// <returns>Register page</returns>
         //
         // GET: /Account/Register
         [HttpGet]
@@ -74,6 +98,11 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Registers in users, sign them in and redirects to default page or returnUrl.
+        /// </summary>
+        /// <param name="model">Register data. Includes Email and Password.</param>
+        /// <param name="returnUrl">Represents URL to redirect after logging in.</param>
         //
         // POST: /Account/Register
         [HttpPost]
@@ -106,6 +135,10 @@ namespace VehicleShop.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Signs the current user out and redirects to Index page.
+        /// </summary>
+        /// <returns>Index page of VehiclesController.</returns>
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -117,6 +150,12 @@ namespace VehicleShop.Controllers
             return RedirectToAction(nameof(VehiclesController.Index), "Vehicles");
         }
 
+        /// <summary>
+        /// Validates that an email token matches the specific user and redirects to the proper page.
+        /// </summary>
+        /// <param name="userId">ID of the user who want to confirm his email.</param>
+        /// <param name="code">Email confirmation token</param>
+        /// <returns></returns>
         // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
@@ -135,6 +174,10 @@ namespace VehicleShop.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
+        /// <summary>
+        /// Returns Forgot Password page.
+        /// </summary>
+        /// <returns>Forgot Password page</returns>
         //
         // GET: /Account/ForgotPassword
         [HttpGet]
@@ -144,6 +187,11 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Generates password reset token and sends to the specific user.
+        /// </summary>
+        /// <param name="model">ForgotPassword data. Contains Email.</param>
+        /// <returns>Redirects to the Forgot Password Confirmation page.</returns>
         //
         // POST: /Account/ForgotPassword
         [HttpPost]
@@ -173,6 +221,10 @@ namespace VehicleShop.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Returns Forgot Password Confirmation.
+        /// </summary>
+        /// <returns>Forgot Password Confirmation page</returns>
         //
         // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]
@@ -182,6 +234,10 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Redirects to Reset Password page.
+        /// </summary>
+        /// <param name="code">Reset password token</param>
         //
         // GET: /Account/ResetPassword
         [HttpGet]
@@ -191,6 +247,11 @@ namespace VehicleShop.Controllers
             return code == null ? View("Error") : View();
         }
 
+        /// <summary>
+        /// Validates reset password token and resets the user's password to the specified new password.
+        /// </summary>
+        /// <param name="model">Reset Password data. Contains email, new password and reset password token.</param>
+        /// <returns>Redirects to Reset Password page.</returns>
         //
         // POST: /Account/ResetPassword
         [HttpPost]
@@ -217,6 +278,9 @@ namespace VehicleShop.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Returns Reset Password Confirmation page.
+        /// </summary>
         //
         // GET: /Account/ResetPasswordConfirmation
         [HttpGet]
