@@ -31,15 +31,6 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             return _vehiclesRepository.GetVehicleAsync(vehicleId);
         }
 
-        public async Task UpdateVehicleWithCustomerAsync(int vehicleId, int customerId)
-        {
-            var vehicle = await GetVehicleByIdAsync(vehicleId);
-            vehicle.DistributorId = null;
-            vehicle.CustomerId = customerId;
-
-            await _vehiclesRepository.UpdateVehicleAsync(vehicle);
-        }
-
         public Task<IList<Vehicle>> GetCustomerVehiclesAsync(int customerId)
         {
             return _vehiclesRepository.GetVehiclesAsync(q => q

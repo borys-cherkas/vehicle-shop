@@ -43,6 +43,13 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             return _customersRepository.GetCustomerByUserNameAsync(userName);
         }
 
+        public async Task ReplenishBalanceAsync(int customerId, double amount)
+        {
+            var customer = await _customersRepository.GetCustomerAsync(customerId);
+            customer.Balance += amount;
+            await UpdateCustomerAsync(customer);
+        }
+
         public Task UpdateCustomerAsync(Customer customer)
         {
             return  _customersRepository.UpdateAsync(customer);

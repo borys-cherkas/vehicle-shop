@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using VehicleShop.BusinessLayer.Services.Interfaces;
+using VehicleShop.DataLayer.Constants;
 using VehicleShop.DataLayer.Entities;
 using VehicleShop.Models;
 using VehicleShop.Models.ManageViewModels;
@@ -15,6 +17,7 @@ namespace VehicleShop.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private readonly ICustomersService _customersService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
@@ -22,15 +25,18 @@ namespace VehicleShop.Controllers
         /// <summary>
         /// Creates a new instance of VehicleShop.Controllers.ManageController.
         /// </summary>
+        /// <param name="customersService"></param>
         /// <param name="userManager">Provides the APIs for managing user.</param>
         /// <param name="signInManager">Represents service for user sign in functionality.</param>
         /// <param name="loggerFactory">Represents a type used to configure the logging system 
         /// and create instances of Microsoft.Extensions.Logging.ILogger.</param>
         public ManageController(
+            ICustomersService customersService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILoggerFactory loggerFactory)
         {
+            _customersService = customersService;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<ManageController>();
@@ -46,11 +52,9 @@ namespace VehicleShop.Controllers
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess
-                    ? "Your password has been changed."
-                    : message == ManageMessageId.Error
-                    ? "An error has occurred."
-                    : "";
+                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.Error ? "An error has occurred."
+                : "";
 
             var user = await GetCurrentUserAsync();
             if (user == null)

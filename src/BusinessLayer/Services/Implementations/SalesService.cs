@@ -16,17 +16,17 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IVehiclesService _vehiclesService;
         private readonly ICustomersService _customersService;
-        private readonly ITransactionsRepository _transactionsRepository;
+        private readonly ISalesRepository _salesRepository;
 
         public SalesService(UserManager<ApplicationUser> userManager,
             IVehiclesService vehiclesService,
             ICustomersService customersService,
-            ITransactionsRepository transactionsRepository)
+            ISalesRepository salesRepository)
         {
             _userManager = userManager;
             _vehiclesService = vehiclesService;
             _customersService = customersService;
-            _transactionsRepository = transactionsRepository;
+            _salesRepository = salesRepository;
         }
 
         public async Task<bool> CanUserBuyVehicleAsync(string userName, int vehicleId)
@@ -64,25 +64,7 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
                 return false;
             }
 
-            var transaction = new Transaction()
-            {
-                DistributorId = vehicle.DistributorId.Value,
-                CustomerId = customer.Id,
-                VehicleId = vehicle.Id,
-                Amount = vehicle.Cost,
-                TransactionTime = DateTime.UtcNow
-            };
-
-
-            customer.Balance -= vehicle.Cost;
-            await _customersService.UpdateCustomerAsync(customer);
-
-            transaction = await _transactionsRepository.AddTransactionAsync(transaction);
-            if (transaction == null)
-            {
-                return false;
-            }
-            await _vehiclesService.UpdateVehicleWithCustomerAsync(vehicleId, customer.Id);
+            await _salesRepository.BuyCarAsync(vehicleId, customer.Id);
             return true;
         }
     }

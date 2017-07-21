@@ -29,5 +29,19 @@ namespace VehicleShop.DataLayer.Repositories.Implementations
 
             return await query.ToListAsync();
         }
+
+        public Task<Distributor> GetDistributorByIdAsync(int id, Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null)
+        {
+            var query = _distributors
+                .ProcessQuery(queryFunc);
+
+            return query.SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task UpdateAsync(Distributor distributor)
+        {
+            _dbContext.Distributors.Update(distributor);
+            return _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -11,5 +11,10 @@ namespace VehicleShop.DataLayer.Repositories.Interfaces
     {
         Task<IList<Distributor>> GetDistributorsAsync(
             Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null);
+
+        Task<Distributor> GetDistributorByIdAsync(int id,
+            Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null);
+
+        Task UpdateAsync(Distributor distributor);
     }
 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleShop.BusinessLayer.Services.Interfaces;
 using VehicleShop.DataLayer.Constants;
+using VehicleShop.Models.Customer;
+using VehicleShop.Models.ManageViewModels;
 
 namespace VehicleShop.Controllers
 {
@@ -31,13 +33,56 @@ namespace VehicleShop.Controllers
         /// Returns Index page with vehicles.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
+            ViewData["StatusMessage"] = 
+                message == ManageMessageId.Error ? "An error has occurred."
+                : message == ManageMessageId.ReplenishBalanceSuccess ? "Balance has been replenished successfully"
+                : "";
+
             string userName = User.Identity.Name;
             var customer = await _customersService.GetByAppUserNameAsync(userName);
             var vehicles = await _vehiclesService.GetCustomerVehiclesAsync(customer.Id);
 
-            return View(vehicles);
+            var vm = new IndexViewModel()
+            {
+                Vehicles = vehicles,
+                Customer = customer
+            };
+
+            return View(vm);
+        }
+
+
+        [HttpGet]
+        [Authorize(Roles = RolesConstants.Customer)]
+        public IActionResult ReplenishBalance()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = RolesConstants.Customer)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReplenishBalance(ReplenishAccountViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var customer = await _customersService.GetByAppUserNameAsync(User.Identity.Name);
+            await _customersService.ReplenishBalanceAsync(customer.Id, model.Amount);
+
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ReplenishBalanceSuccess });
+        }
+
+
+
+        public enum ManageMessageId
+        {
+            ReplenishBalanceSuccess,
+            Error
         }
     }
 }

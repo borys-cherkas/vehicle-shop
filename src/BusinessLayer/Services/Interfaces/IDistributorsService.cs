@@ -9,5 +9,9 @@ namespace VehicleShop.BusinessLayer.Services.Interfaces
     public interface IDistributorsService
     {
         Task<IList<Distributor>> GetDistributorsAsync();
+
+        Task<Distributor> GetDistributorByIdAsync(int id);
+
+        Task UpdateDistributorAsync(Distributor distributor);
     }
 }

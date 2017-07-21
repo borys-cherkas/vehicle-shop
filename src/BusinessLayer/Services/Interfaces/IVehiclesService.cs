@@ -13,7 +13,5 @@ namespace VehicleShop.BusinessLayer.Services.Interfaces
         Task<IList<Vehicle>> GetCustomerVehiclesAsync(int customerId);
 
         Task<Vehicle> GetVehicleByIdAsync(int vehicleId);
-
-        Task UpdateVehicleWithCustomerAsync(int vehicleId, int customerId);
     }
 }

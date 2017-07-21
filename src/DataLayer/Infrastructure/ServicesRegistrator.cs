@@ -12,6 +12,7 @@ namespace VehicleShop.DataLayer.Infrastructure
             services.AddTransient<IDistributorsRepository, DistributorsRepository>();
             services.AddTransient<ITransactionsRepository, TransactionsRepository>();
             services.AddTransient<IVehiclesRepository, VehiclesRepository>();
+            services.AddTransient<ISalesRepository, SalesRepository>();
         }
     }
 }

@@ -15,6 +15,8 @@ namespace VehicleShop.BusinessLayer.Services.Interfaces
         
         Task<Customer> GetByAppUserNameAsync(string userName);
 
+        Task ReplenishBalanceAsync(int customerId, double amount);
+
         Task UpdateCustomerAsync(Customer customer);
     }
 }

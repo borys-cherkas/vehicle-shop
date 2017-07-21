@@ -1,33 +1,50 @@
-﻿@model IEnumerable<Vehicle>
+﻿@using VehicleShop.Models.Customer
+@model IndexViewModel
 
 @{
-    ViewBag.Title = "Vehicles";
+    ViewBag.Title = "Customer Management Page";
     Layout = "_Layout";
 }
 
-<h2>Your Own Vehicles</h2>
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
 
+<div>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>Balance:</dt>
+        <dd>
+            @Model.Customer.Balance
+        </dd>
 
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <td>Name</td>
-        <td>Current Price</td>
-        <td>Description</td>
-        <td></td>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var vehicle in Model)
-    {
+        <dt>Replenish Balance:</dt>
+        <dd>
+            <a asp-controller="Customer" asp-action="ReplenishBalance" class="btn-bracketed">Replenish</a>
+        </dd>
+    </dl>
+
+    <br />
+
+    <h2>Your Vehicles</h2>
+
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <td>@vehicle.Name</td>
-            <td>@vehicle.Cost</td>
-            <td>@vehicle.Description</td>
-            <td>
-                <a class="btn btn-success">Sell Out (not implemented)</a>
-            </td>
+            <td>Name</td>
+            <td>Current Price</td>
+            <td>Description</td>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var vehicle in Model.Vehicles)
+        {
+            <tr>
+                <td>@vehicle.Name</td>
+                <td>@vehicle.Cost</td>
+                <td>@vehicle.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
