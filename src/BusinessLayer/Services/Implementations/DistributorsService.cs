@@ -27,7 +27,13 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
 
         public Task<Distributor> GetDistributorByIdAsync(int id)
         {
-            return _distributorsRepository.GetDistributorByIdAsync(id);
+            return _distributorsRepository.GetDistributorByIdAsync(id,
+                x => x.Include(d => d.User));
+        }
+
+        public Task<Distributor> GetDistributorByUserIdAsync(string userId)
+        {
+            return _distributorsRepository.GetDistributorByUserIdAsync(userId);
         }
 
         public Task<Distributor> GetDistributorByUserNameAsync(string username)

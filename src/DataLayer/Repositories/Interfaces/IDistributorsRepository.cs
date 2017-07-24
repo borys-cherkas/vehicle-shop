@@ -15,6 +15,9 @@ namespace VehicleShop.DataLayer.Repositories.Interfaces
         Task<Distributor> GetDistributorByIdAsync(int id,
             Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null);
 
+        Task<Distributor> GetDistributorByUserIdAsync(string userId,
+            Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null);
+
         Task<Distributor> GetDistributorByAppUserNameAsync(string username,
             Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null);
 

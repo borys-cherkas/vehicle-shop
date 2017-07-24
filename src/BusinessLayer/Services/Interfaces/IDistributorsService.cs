@@ -12,6 +12,8 @@ namespace VehicleShop.BusinessLayer.Services.Interfaces
 
         Task<Distributor> GetDistributorByIdAsync(int id);
 
+        Task<Distributor> GetDistributorByUserIdAsync(string modelUserId);
+
         Task<Distributor> GetDistributorByUserNameAsync(string username);
 
         Task UpdateDistributorAsync(Distributor distributor);

@@ -1,8 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using VehicleShop.BusinessLayer.Services.Interfaces;
 using VehicleShop.DataLayer.Constants;
+using VehicleShop.DataLayer.Entities;
+using VehicleShop.Models.Admin;
 
 namespace VehicleShop.Controllers
 {
@@ -13,14 +17,17 @@ namespace VehicleShop.Controllers
     public class AdminController : Controller
     {
         private readonly IDistributorsService _distributorsService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         /// <summary>
         /// Creates a new instance of VehicleShop.Controllers.AdminController.
         /// </summary>
         /// <param name="distributorsService">The service to manage distributors.</param>
-        public AdminController(IDistributorsService distributorsService)
+        public AdminController(IDistributorsService distributorsService,
+            UserManager<ApplicationUser> userManager)
         {
             _distributorsService = distributorsService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -31,6 +38,56 @@ namespace VehicleShop.Controllers
         {
             var distributors = await _distributorsService.GetDistributorsAsync();
             return View(distributors);
+        }
+
+        /// <summary>
+        /// Returns Edit Distributor Credentials page.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> EditDistributorCredentials(int distributorId)
+        {
+            var distributor = await _distributorsService.GetDistributorByIdAsync(distributorId);
+            var editCredentialsViewModel = new EditDistributorCredentialsViewModel()
+            {
+                Email = distributor.User.Email,
+                UserId = distributor.UserId
+            };
+            return View(editCredentialsViewModel);
+        }
+
+        /// <summary>
+        /// Allow administrators to edit distributor's credentials.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> EditDistributorCredentials(EditDistributorCredentialsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            ApplicationUser userByEmail = await _userManager.FindByEmailAsync(model.Email);
+            bool emailAlreadyExists = userByEmail != null && userByEmail.Id != model.UserId;
+            if (emailAlreadyExists)
+            {
+                ModelState.AddModelError("Email", "User with the same email already exists.");
+                return View(model);
+            }
+
+
+            ApplicationUser user = await _userManager.FindByIdAsync(model.UserId);
+
+            user.UserName = model.Email;
+            user.Email = model.Email;
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
+                user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction("Index");
         }
     }
 }

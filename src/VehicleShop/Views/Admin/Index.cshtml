@@ -5,16 +5,26 @@
     Layout = "_Layout";
 }
 
-<h2>Admin Page</h2>
+<h2>Administration</h2>
+
+<br/>
+<br/>
+
+<h3>Distributors</h3>
+
+<p>
+    @Html.ActionLink("Create New", "CreateDistributor")
+</p>
 
 <table class="table table-striped">
     <thead>
-        <tr>
-            <td>Email</td>
-            <td>AddressLine1</td>
-            <td>Phone</td>
-            <td>Vehicles Count</td>
-        </tr>
+    <tr>
+        <th>Email</th>
+        <th>AddressLine1</th>
+        <th>Phone</th>
+        <th>Vehicles Count</th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
     @foreach (var distributor in Model)
@@ -24,6 +34,11 @@
             <td>@distributor.AddressLine1
             <td>@distributor.ContactPhone</td>
             <td>@distributor.Vehicles.Count</td>
+            <td>
+                @Html.ActionLink("Edit Credentials", "EditDistributorCredentials", new {distributorId = distributor.Id}) |
+                @*@Html.ActionLink("Edit", "EditDistributor", new {distributorId = item.DistributorID}) |
+                @Html.ActionLink("Details", "DistributorDetails", new {distributorId = item.DistributorID})*@
+            </td>
         </tr>
     }
     </tbody>
