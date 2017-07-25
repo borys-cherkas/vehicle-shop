@@ -30,7 +30,8 @@ namespace VehicleShop.Controllers
             ViewData["StatusMessage"] =
                 message == DistributorsMessageId.Error ? "An error has occurred."
                 : message == DistributorsMessageId.VehicleSalesStateChangedSuccess ? "Vehicle sales state has changed successfully."
-                : message == DistributorsMessageId.VehicleUpdateSuccess ? "Vehicle has been updated successfully."
+                : message == DistributorsMessageId.UpdateVehicleSuccess ? "Vehicle has been updated successfully."
+                : message == DistributorsMessageId.CreateVehicleSuccess ? "Vehicle has been created successfully."
                 : "";
 
             string username = User.Identity.Name;
@@ -102,7 +103,7 @@ namespace VehicleShop.Controllers
             };
             await _vehiclesService.CreateVehicleAsync(vehicleModel);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { Message = DistributorsMessageId.CreateVehicleSuccess });
         }
 
         [HttpGet]
@@ -131,14 +132,15 @@ namespace VehicleShop.Controllers
 
             await _vehiclesService.UpdateAsync(vehicle);
 
-            return RedirectToAction("Index", new { Message = DistributorsMessageId.VehicleUpdateSuccess });
+            return RedirectToAction("Index", new { Message = DistributorsMessageId.UpdateVehicleSuccess });
         }
 
 
         public enum DistributorsMessageId
         {
             VehicleSalesStateChangedSuccess,
-            VehicleUpdateSuccess,
+            CreateVehicleSuccess,
+            UpdateVehicleSuccess,
             Error
         }
     }

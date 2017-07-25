@@ -8,6 +8,9 @@ using VehicleShop.DataLayer.DbContext;
 using VehicleShop.DataLayer.Entities;
 using VehicleShop.DataLayer.Extensions;
 using VehicleShop.DataLayer.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using VehicleShop.DataLayer.Constants;
 
 namespace VehicleShop.DataLayer.Repositories.Implementations
 {
@@ -52,6 +55,35 @@ namespace VehicleShop.DataLayer.Repositories.Implementations
                 .ProcessQuery(queryFunc);
 
             return query.SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IdentityResult> CreateDistributorWithUserAsync(ApplicationUser appUser, Distributor distributor)
+        {
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                IdentityResult res;
+                using (var userStore = new UserStore<ApplicationUser>(_dbContext))
+                {
+                    res = await userStore.CreateAsync(appUser);
+
+                    if (res.Succeeded)
+                    {
+                        await userStore.AddToRoleAsync(appUser, RolesConstants.Distributor);
+
+                        distributor.UserId = appUser.Id;
+                        await _dbContext.Distributors.AddAsync(distributor);
+                        await _dbContext.SaveChangesAsync();
+
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                    }
+                }
+
+                return res;
+            }
         }
 
         public Task UpdateAsync(Distributor distributor)

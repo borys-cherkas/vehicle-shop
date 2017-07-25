@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace VehicleShop.DataLayer.Repositories.Interfaces
 
         Task<Distributor> GetDistributorByAppUserNameAsync(string username,
             Func<IQueryable<Distributor>, IQueryable<Distributor>> queryFunc = null);
+
+        Task<IdentityResult> CreateDistributorWithUserAsync(ApplicationUser appUser, Distributor distributor);
 
         Task UpdateAsync(Distributor distributor);
     }

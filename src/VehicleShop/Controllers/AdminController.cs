@@ -7,6 +7,8 @@ using VehicleShop.BusinessLayer.Services.Interfaces;
 using VehicleShop.DataLayer.Constants;
 using VehicleShop.DataLayer.Entities;
 using VehicleShop.Models.Admin;
+using VehicleShop.BusinessLayer.Models;
+using VehicleShop.Extensions;
 
 namespace VehicleShop.Controllers
 {
@@ -38,6 +40,35 @@ namespace VehicleShop.Controllers
         {
             var distributors = await _distributorsService.GetDistributorsAsync();
             return View(distributors);
+        }
+
+        [HttpGet]
+        public IActionResult CreateDistributor()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDistributor(CreateDistributorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            CreateDistributorDTO dto = model.MapToCreateDistributorDTO();
+
+            var res = await _distributorsService.CreateDistributorWithUserAsync(dto);
+            if (!res.Succeeded)
+            {
+                AddErrors(res);
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -89,5 +120,17 @@ namespace VehicleShop.Controllers
 
             return RedirectToAction("Index");
         }
+
+        #region Helpers 
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        #endregion
     }
 }
