@@ -18,6 +18,8 @@ namespace VehicleShop.BusinessLayer.Services.Interfaces
 
         Task ChangeSalesStateAsync(int vehicleId, bool newSalesState);
 
+        Task CreateVehicleAsync(Vehicle vehicleModel);
+
         Task UpdateAsync(Vehicle vehicle);
     }
 }

@@ -50,6 +50,11 @@ namespace VehicleShop.BusinessLayer.Services.Implementations
             await _vehiclesRepository.UpdateVehicleAsync(vehicle);
         }
 
+        public Task CreateVehicleAsync(Vehicle vehicleModel)
+        {
+            return _vehiclesRepository.CreateAsync(vehicleModel);
+        }
+
         public Task UpdateAsync(Vehicle vehicle)
         {
             return _vehiclesRepository.UpdateVehicleAsync(vehicle);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using VehicleShop.BusinessLayer.Services.Interfaces;
 using VehicleShop.DataLayer.Constants;
 using VehicleShop.Models.Distributor;
+using VehicleShop.DataLayer.Entities;
 
 namespace VehicleShop.Controllers
 {
@@ -71,7 +72,37 @@ namespace VehicleShop.Controllers
             await _vehiclesService.ChangeSalesStateAsync(model.VehicleId, model.NewSalesState);
 
             return RedirectToAction(nameof(Index),
-                new {Message = DistributorsMessageId.VehicleSalesStateChangedSuccess});
+                new { Message = DistributorsMessageId.VehicleSalesStateChangedSuccess });
+        }
+
+        [HttpGet]
+        public IActionResult CreateVehicle()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateVehicle(EditVehicleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            string userName = User.Identity.Name;
+            var distributor = await _distributorsService.GetDistributorByUserNameAsync(userName);
+
+            var vehicleModel = new Vehicle()
+            {
+                IsSelling = model.IsSelling,
+                Cost = model.Cost,
+                Description = model.Description,
+                Name = model.Name,
+                DistributorId = distributor.Id
+            };
+            await _vehiclesService.CreateVehicleAsync(vehicleModel);
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -100,7 +131,7 @@ namespace VehicleShop.Controllers
 
             await _vehiclesService.UpdateAsync(vehicle);
 
-            return RedirectToAction("Index", new {Message = DistributorsMessageId.VehicleUpdateSuccess});
+            return RedirectToAction("Index", new { Message = DistributorsMessageId.VehicleUpdateSuccess });
         }
 
 

@@ -39,6 +39,12 @@ namespace VehicleShop.DataLayer.Repositories.Implementations
             return query.SingleOrDefaultAsync(x => x.Id == vehicleId);
         }
 
+        public async Task CreateAsync(Vehicle vehicleModel)
+        {
+            await _dbContext.Vehicles.AddAsync(vehicleModel);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public Task UpdateVehicleAsync(Vehicle vehicle)
         {
             _dbContext.Vehicles.Update(vehicle);

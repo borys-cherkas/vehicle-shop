@@ -13,6 +13,8 @@ namespace VehicleShop.DataLayer.Repositories.Interfaces
 
         Task<Vehicle> GetVehicleAsync(int vehicleId, Func<IQueryable<Vehicle>, IQueryable<Vehicle>> queryFunc = null);
 
+        Task CreateAsync(Vehicle vehicleModel);
+
         Task UpdateVehicleAsync(Vehicle vehicle);
     }
 }
