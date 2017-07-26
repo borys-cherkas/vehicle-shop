@@ -6,6 +6,7 @@ namespace VehicleShop.Controllers
     {
         public IActionResult Error()
         {
+            ViewBag.Message = "Some Error Message";
             return View();
         }
     }

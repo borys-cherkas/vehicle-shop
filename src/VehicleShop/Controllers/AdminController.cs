@@ -57,8 +57,6 @@ namespace VehicleShop.Controllers
                 return View(model);
             }
 
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
             CreateDistributorDTO dto = model.MapToCreateDistributorDTO();
 
             var res = await _distributorsService.CreateDistributorWithUserAsync(dto);

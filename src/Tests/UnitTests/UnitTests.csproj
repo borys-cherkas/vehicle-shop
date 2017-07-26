@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BusinessLayer\BusinessLayer.csproj" />
+    <ProjectReference Include="..\..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\..\VehicleShop\VehicleShop.csproj" />
+  </ItemGroup>
+
+</Project>
